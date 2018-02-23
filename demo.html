@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Hot term </title>
+        <link rel="stylesheet" type="text/css" href="demo.css" />
+        <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.15/marked.min.js"></script>
+    </head>
+    <body>
+        <div class="wmd-panel">
+        </div>
+        <div id="hotterm-raw" class="wmd-panel wmd-preview"></div>
+        <div id="hotterm-preview" class="wmd-panel wmd-preview"></div>
+        <script type="text/javascript">
+            (function () {
+                var url = geturl(dateToYMD(new Date()));
+                $.get( url, function( data ) {
+                $( ".result" ).html( data );
+                　　var content = data;
+                    $('#hotterm-preview').html(marked(content));
+                　　  //$('#hotterm-preview').html(converter.makeHtml(content));
+                　　  //$('#hotterm-raw').html(content);
+                    alert( "Load was performed." );
+                });
+            })();
+
+            function dateToYMD(date) {
+              var d = date.getDate();
+              var m = date.getMonth() + 1; //Month from 0 to 11
+              var y = date.getFullYear();
+              var h = date.getHours();
+              m = (m <= 9 ? '0' + m : m);
+              d = (d <= 9 ? '0' + d : d);
+              h = (h <= 9 ? '0' + h : h);
+              return y + '/' + m + '/' + d + '/' + y + m + '' + d + '_' + h;
+            }
+            function geturl(d) {
+              var url_prefix = "https://raw.githubusercontent.com/peicheng/hotterm/master/md/";
+              return url_prefix + d + '_hotterm.md'
+            }
+        </script>
+    </body>
+</html>
