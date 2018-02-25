@@ -2,31 +2,57 @@
 <html>
     <head>
         <title>Hot term </title>
-        <link rel="stylesheet" type="text/css" href="demo.css" />
-        <script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
+        <!-- <link href="main.css" rel="stylesheet"> -->
+          <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.15/marked.min.js"></script>
     </head>
+
     <body>
-        <div class="wmd-panel">
+      <style type="text/css">
+      .ui-btn-top {
+        position: fixed;
+        bottom: 20px;
+        right: 5px;
+      }
+      </style>
+      <div id="main" class="main-container container">
+        <div class="row">
+          <div class="col s12">
+          <div class="wmd-panel"></div>
+          <div id="category"></div>
+          <div id="hotterm-raw" class="wmd-panel wmd-preview"></div>
+          <div id="hotterm-preview" class="wmd-panel wmd-preview"></div>
+          </div>
         </div>
-        <div id="hotterm-raw" class="wmd-panel wmd-preview"></div>
-        <div id="hotterm-preview" class="wmd-panel wmd-preview"></div>
+        <!-- https://design.google.com/icons/#ic_keyboard_arrow_up //-->
+        <a class="btn-floating btn-large waves-effect waves-light lighten-2 red ui-btn-top"><i class="material-icons">up</i></a>
+      </div>
         <script type="text/javascript">
             (function () {
                 var url = geturl(dateToYMD(new Date()));
-                $.get( url, function( data ) {
-                $( ".result" ).html( data );
-                　　var content = data;
-                    $('#hotterm-preview').html(marked(content));
-                　　  //$('#hotterm-preview').html(converter.makeHtml(content));
-                　　  //$('#hotterm-raw').html(content);
-                    alert( "Load was performed." );
+                $.get(url, function(data, status) {
+                    $( ".result" ).html( data );
+                    $("#hotterm-preview").html(marked(data));
+                    toc();
+                    //alert(status);
+                    //alert( "Load was performed." );
                 });
             })();
-
+            function toc(){
+                $("h2,h3,h4,h5,h6").each(function(i,item){
+                var tag = $(item).get(0).localName;
+                $(item).attr("id","wow"+i);
+                $("#category").append('<a class="new'+tag+'" href="#wow'+i+'">'+$(this).text()+'</a></br>');
+                $(".newh2").css("margin-left",0);
+                $(".newh3").css("margin-left",20);
+                $(".newh4").css("margin-left",40);
+                $(".newh5").css("margin-left",60);
+                $(".newh6").css("margin-left",80);
+              });
+            }
             function dateToYMD(date) {
               var d = date.getDate();
               var m = date.getMonth() + 1; //Month from 0 to 11
@@ -41,6 +67,12 @@
               var url_prefix = "https://raw.githubusercontent.com/peicheng/hotterm/master/md/";
               return url_prefix + d + '_hotterm.md'
             }
+            $(document).ready(function() {
+                $(document).on('click', '.ui-btn-top', function(evt) {
+                  evt.preventDefault();
+                  $('html, body').animate({scrollTop : 0}, 300); //http://api.jquery.com/animate/
+                });
+            });
         </script>
     </body>
 </html>
