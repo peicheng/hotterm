@@ -35,10 +35,12 @@
                 var date = new Date();
                 date.setMinutes(date.getMinutes() - 6);
                 var url = geturl(dateToYMD(date));
+
                 $.get(url, function(data, status) {
                     $( ".result" ).html( data );
                     $("#hotterm-preview").html(marked(data));
                     toc();
+                    $("#category").prepend('<h3>Hot Term('+ date +')</h2>');
                     //alert(status);
                     //alert( "Load was performed." );
                 }).fail(function(){
