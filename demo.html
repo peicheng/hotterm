@@ -2,10 +2,10 @@
 <html>
     <head>
         <title>Hot term </title>
-        <!-- <link href="main.css" rel="stylesheet"> -->
+        
           <!-- Compiled and minified CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-
+        <link href="main.css" rel="stylesheet">
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.15/marked.min.js"></script>
     </head>
@@ -24,7 +24,7 @@
           <div class="wmd-panel"></div>
           <div id="category"></div>
           <div id="hotterm-raw" class="wmd-panel wmd-preview"></div>
-          <div id="hotterm-preview" class="wmd-panel wmd-preview"></div>
+          <div id="hotterm-preview" class="wmd-panel wmd-preview" style="padding: 40px; min-height: 565px; display: block;"></div>
           </div>
         </div>
         <!-- https://design.google.com/icons/#ic_keyboard_arrow_up //-->
@@ -32,25 +32,31 @@
       </div>
         <script type="text/javascript">
             (function () {
-                var url = geturl(dateToYMD(new Date()));
+                var date = new Date();
+                date.setMinutes(date.getMinutes() - 6);
+                var url = geturl(dateToYMD(date));
                 $.get(url, function(data, status) {
                     $( ".result" ).html( data );
                     $("#hotterm-preview").html(marked(data));
                     toc();
                     //alert(status);
                     //alert( "Load was performed." );
+                }).fail(function(){
+                    alert('zzz' + status);
                 });
             })();
+
+
             function toc(){
                 $("h2,h3,h4,h5,h6").each(function(i,item){
-                var tag = $(item).get(0).localName;
-                $(item).attr("id","wow"+i);
-                $("#category").append('<a class="new'+tag+'" href="#wow'+i+'">'+$(this).text()+'</a></br>');
-                $(".newh2").css("margin-left",0);
-                $(".newh3").css("margin-left",20);
-                $(".newh4").css("margin-left",40);
-                $(".newh5").css("margin-left",60);
-                $(".newh6").css("margin-left",80);
+                  var tag = $(item).get(0).localName;
+                  $(item).attr("id","wow"+i);
+                  $("#category").append('<a class="new'+tag+'" href="#wow'+i+'">'+$(this).text()+'</a></br>');
+                  $(".newh2").css("margin-left",0);
+                  $(".newh3").css("margin-left",20);
+                  $(".newh4").css("margin-left",40);
+                  $(".newh5").css("margin-left",60);
+                  $(".newh6").css("margin-left",80);
               });
             }
             function dateToYMD(date) {

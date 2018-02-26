@@ -1,0 +1,22 @@
+ #category{
+ 	background: #FFF;
+    box-shadow: 0 2px 1px rgba(0,0,0,.3),0 0 1px rgba(0,0,0,.3);
+    border-radius: 2px;
+    margin: 6px 12px;
+    padding: 12px
+
+ }
+ #category a{
+ font-size: 1.5em;
+}
+ .main {
+  margin: 0 auto;
+}
+
+ #hotterm-preview > p {
+	font-size:1.5em;
+}
+
+ #hotterm-preview > ul li {
+	font-size:1.5em;
+}
