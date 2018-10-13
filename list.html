@@ -5,9 +5,11 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
+    <meta property="og:site_name" content="Hot Term 熱門關鍵字" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Hot Term 熱門關鍵字" />
+    <meta property="og:url" content="" />
+    <meta property="og:description" content="" />
     <title>Hot Term</title>
 
     <!-- Bootstrap core CSS -->
@@ -99,6 +101,11 @@
                 var queryd = dateToYMD(date).slice(-11);
                 var url = geturl(dateToYMD(date));
             }
+            $("meta[property='og:url']").attr("content", "http://peicheng.github.io/" + window.location.pathname + "?" + urlParams);
+            $("meta[property='og:title']").attr("content", queryd.slice(0, 8) + ' ' + queryd.slice(9) + '時 熱門關鍵字');
+
+            //$('meta[property="og\\:title"]').attr("content", "http://peicheng.github.io/"+window.location.pathname + "?" + urlParams);
+
             var toc = document.createElement('div');
             toc.className = "toc";
             var block = document.createElement('div');
@@ -111,6 +118,7 @@
             list_div.setAttribute("id", "termblock");
 
             var terms_list = new Array();
+            var title_list = new Array();
             $.get(url, function (data, status) {
                 console.log('info: ' + data.indexOf('\n'));
                 if (data.indexOf('\n') == -1) {
@@ -135,6 +143,7 @@
                         title.className = "anchor";
                         title.innerText = j.term
                         list_div.appendChild(title);
+                        title_list.push(j.term);
 
                         let summary = document.createElement('p');
                         summary.innerText = j.summary;
@@ -155,6 +164,11 @@
                         console.log(e);
                     }
                 });
+                $("meta[property='og:description']").attr("content", title_list.join(" ") + " 熱門關鍵字");
+                var m = document.createElement('meta');
+                m.name = 'description';
+                m.content = title_list.join(" ") + " 熱門關鍵字";
+                document.head.appendChild(m);
             }).fail(function () {
                 //alert('zzz' + status);
             });
