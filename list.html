@@ -39,7 +39,7 @@
 
 
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <a class="navbar-brand" href="#">Hot Term</a>
+        <a class="navbar-brand" href="/list.html">Hot Term</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
             aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -105,6 +105,7 @@
             //block.appendChild(colmd1_div);
             var list_div = document.createElement('div');
             list_div.className = "col-md-10";
+            list_div.setAttribute("id", "termblock");
 
             var terms_list = new Array();
             $.get(url, function (data, status) {
@@ -162,12 +163,17 @@
             $('#content').append(block);
             $('#content').prepend(toc);
             genTodayListToSidebar(queryd);
+            genThisMonthDayListToSidebar(getThisMonthDayList());
+            //add headline
+            $('#termblock').prepend('<h1>' + queryd.slice(0, 8) + ' ' + queryd.slice(9) + '時 熱門關鍵字</h1>');
+
             if (urlParams.has('d')) {
             } else {
                 urlParams.append('d', queryd)
             }
             window.history.pushState(null, null, window.location.pathname + "?" + urlParams);
             document.title = "Hot Term " + queryd;
+
 
         })();
         function genContent(term_list) {
@@ -212,6 +218,13 @@
             console.log(getDaysInMonth(mm, yyyy))
 
         }
+        function getThisMonthDayList() {
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth();
+            var yyyy = today.getFullYear();
+            return getDaysInMonth(mm, yyyy);
+        }
         /**
         * @param {int} The month number, 0 based
         * @param {int} The year, not zero based, required to account for leap years
@@ -225,7 +238,7 @@
             var m = month + 1;
             while (date.getMonth() === month) {
                 //days.push(new Date(date));
-                days.push(year + " " + (m < 10 ? '0' : '') + m + " " + (date.getDate() < 10 ? '0' : '') + date.getDate());
+                days.push(year + "" + (m < 10 ? '0' : '') + m + "" + (date.getDate() < 10 ? '0' : '') + date.getDate());
                 date.setDate(date.getDate() + 1);
             }
             return days;
@@ -239,6 +252,19 @@
                 let text = queryd.slice(0, 4) + '-' + queryd.slice(4, 6) + '-' + queryd.slice(6, 8) + " " + (i < 10 ? "0" + i : i);
                 todaydiv.append("<li><a href='" + link + "'>" + text + "</a></li>");
             }
+            $('#sidebar').append(todaydiv);
+
+        }
+        function genThisMonthDayListToSidebar(daylist) {
+            //queryd 20181010
+            $('#sidebar').append("<div id='thismonthlist'><h3>本月熱門</h3><ul></ul></div>");
+            let todaydiv = $("#thismonthlist").find('ul');;
+            //20181012_01
+            daylist.forEach(function (queryd) {
+                let link = window.location.pathname + "?d=" + queryd.slice(0, 8) + "_12";
+                let text = queryd.slice(0, 4) + '-' + queryd.slice(4, 6) + '-' + queryd.slice(6, 8);
+                todaydiv.append("<li><a href='" + link + "'>" + text + "</a></li>");
+            });
             $('#sidebar').append(todaydiv);
 
         }
