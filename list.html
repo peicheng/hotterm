@@ -73,13 +73,12 @@
         </div>
         <div class="container" id="content">
             <hr>
-            <button type="button" class="btn btn-info ui-btn-top">
-                <span class="label label-danger glyphicon glyphicon-arrow-up">UP</span>
-            </button>
         </div>
 
         <!-- /container -->
-
+        <button type="button" class="btn btn-info ui-btn-top">
+            <span class="glyphicon glyphicon-arrow-up"></span>UP
+        </button>
     </main>
 
     <footer class="container">
@@ -195,6 +194,7 @@
         $(document).ready(function () {
             $(document).on('click', '.ui-btn-top', function (evt) {
                 evt.preventDefault();
+                alert("click");
                 $('html, body').animate({ scrollTop: 0 }, 300); //http://api.jquery.com/animate/
             });
         });
