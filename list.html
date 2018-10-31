@@ -100,9 +100,7 @@
             } else {
                 var queryd = dateToYMD(date).slice(-11);
                 var url = geturl(dateToYMD(date));
-            }
-            $("meta[property='og:url']").attr("content", "http://peicheng.github.io/" + window.location.pathname + "?" + urlParams);
-            $("meta[property='og:title']").attr("content", queryd.slice(0, 8) + ' ' + queryd.slice(9) + '時 熱門關鍵字');
+            }           
 
             //$('meta[property="og\\:title"]').attr("content", "http://peicheng.github.io/"+window.location.pathname + "?" + urlParams);
 
@@ -165,6 +163,8 @@
                     }
                 });
                 $("meta[property='og:description']").attr("content", title_list.join(" ") + " 熱門關鍵字");
+                $("meta[property='og:url']").attr("content", "http://peicheng.github.io/" + window.location.pathname + "?" + urlParams);
+            $("meta[property='og:title']").attr("content", queryd.slice(0, 8) + ' ' + queryd.slice(9) + '時 熱門關鍵字');
                 var m = document.createElement('meta');
                 m.name = 'description';
                 m.content = title_list.join(" ") + " 熱門關鍵字";
