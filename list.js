@@ -9,7 +9,12 @@
         var queryd = dateToYMD(date).slice(-11);
         var url = geturl(dateToYMD(date));
     }           
-
+    if (urlParams.has('d')) {
+    } else {
+        urlParams.append('d', queryd)
+    }
+    window.history.pushState(null, null, window.location.pathname + "?" + urlParams);
+    document.title = "Hot Term " + queryd;
     //$('meta[property="og\\:title"]').attr("content", "http://peicheng.github.io/"+window.location.pathname + "?" + urlParams);
 
     var toc = document.createElement('div');
@@ -92,12 +97,7 @@
     //add headline
     $('#termblock').prepend('<h1>' + queryd.slice(0, 8) + ' ' + queryd.slice(9) + '時 熱門關鍵字</h1>');
 
-    if (urlParams.has('d')) {
-    } else {
-        urlParams.append('d', queryd)
-    }
-    window.history.pushState(null, null, window.location.pathname + "?" + urlParams);
-    document.title = "Hot Term " + queryd;
+
 
 
 })();
