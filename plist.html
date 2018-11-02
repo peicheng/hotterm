@@ -73,6 +73,7 @@
             <hr>
             <div class="row">
                 <div class="col-md-10" id="termblock">
+                    <div id="jsontest"></div>
                     <div id="hottermtitle"></div>
                     <div id="terms"></div>
                 </div>
@@ -113,6 +114,7 @@
             $.get(url, function (data, status) {
                 //console.log('info: ' + data.indexOf('\n'));
                 data = data.trim();
+                $('#jsontest').html(data);
                 if (data.indexOf('\n') == -1) {
                     //'old'
                     var splitflag = false;
