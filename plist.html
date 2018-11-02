@@ -91,7 +91,7 @@
     </footer>
     <script type="text/javascript">
         (function () {
-            
+
             //var urlParams = new URLSearchParams(window.location.search);
             var date = new Date();
             date.setMinutes(date.getMinutes() - 6);
@@ -104,9 +104,10 @@
                 var url = geturl(dateToYMD(date));
             }*/
             var url = geturl(dateToYMD(date));
-
+            /*
             var terms_list = new Array();
             var title_list = new Array();
+            */
             var termscontent = '';
             var tochtml = '';
             $.get(url, function (data, status) {
@@ -132,7 +133,7 @@
                         termscontent += '<p>' + j.summary + '</p>';
                         termscontent += '<ul>';
                         j.links.forEach(function (l) {
-                            termscontent += "<li><a href='" + l.url + "' target='_blank'> " + l.title + "</a> " + l.t +"</li>";
+                            termscontent += "<li><a href='" + l.url + "' target='_blank'> " + l.title + "</a> " + l.t + "</li>";
                         });
                         termscontent += '</ul>';
                         //toc
@@ -145,12 +146,12 @@
                 });
                 $('#toc').html(tochtml);
                 $('#terms').html(termscontent);
-
+                /*
                 $("meta[property='og:description']").attr("content", title_list.join(" ") + " 熱門關鍵字");
                 //$("meta[property='og:url']").attr("content", "http://peicheng.github.io/" + window.location.pathname + "?" + urlParams);
                 //$("meta[property='og:title']").attr("content", queryd.slice(0, 8) + ' ' + queryd.slice(9) + '時 熱門關鍵字');
                 $("meta[name='description']").attr('content', title_list.join(" ") + " 熱門關鍵字");
-
+                */
                 /*
                 var m = document.createElement('meta');
                 m.name = 'description';
@@ -178,11 +179,6 @@
 
 
         })();
-
-        function genContent(term_list) {
-            term_list.forEach(function (d) {
-            });
-        }
         function dateToYMD(date) {
             var d = date.getDate();
             var m = date.getMonth() + 1; //Month from 0 to 11
