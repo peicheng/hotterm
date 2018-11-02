@@ -91,16 +91,19 @@
     </footer>
     <script type="text/javascript">
         (function () {
-            var urlParams = new URLSearchParams(window.location.search);
+            
+            //var urlParams = new URLSearchParams(window.location.search);
             var date = new Date();
             date.setMinutes(date.getMinutes() - 6);
+            /*
             if (urlParams.has('d')) {
                 var queryd = urlParams.get('d');
                 var url = geturl(queryd.slice(0, 4) + '/' + queryd.slice(4, 6) + '/' + queryd.slice(6, 8) + '/' + queryd);
             } else {
                 var queryd = dateToYMD(date).slice(-11);
                 var url = geturl(dateToYMD(date));
-            }
+            }*/
+            var url = geturl(dateToYMD(date));
 
             var terms_list = new Array();
             var title_list = new Array();
@@ -144,8 +147,8 @@
                 $('#terms').html(termscontent);
 
                 $("meta[property='og:description']").attr("content", title_list.join(" ") + " 熱門關鍵字");
-                $("meta[property='og:url']").attr("content", "http://peicheng.github.io/" + window.location.pathname + "?" + urlParams);
-                $("meta[property='og:title']").attr("content", queryd.slice(0, 8) + ' ' + queryd.slice(9) + '時 熱門關鍵字');
+                //$("meta[property='og:url']").attr("content", "http://peicheng.github.io/" + window.location.pathname + "?" + urlParams);
+                //$("meta[property='og:title']").attr("content", queryd.slice(0, 8) + ' ' + queryd.slice(9) + '時 熱門關鍵字');
                 $("meta[name='description']").attr('content', title_list.join(" ") + " 熱門關鍵字");
 
                 /*
@@ -158,7 +161,8 @@
             }).fail(function () {
                 //alert('zzz' + status);
             });
-            $('#hottermtitle').html('<h1>' + queryd.slice(0, 8) + ' ' + queryd.slice(9) + '時 熱門關鍵字</h1>');
+            //$('#hottermtitle').html('<h1>' + queryd.slice(0, 8) + ' ' + queryd.slice(9) + '時 熱門關鍵字</h1>');
+            $('#hottermtitle').html('<h1>' + dateToYMD(date).slice(-11) + ' 熱門關鍵字</h1>');
             /*
             genTodayListToSidebar(queryd);
             genThisMonthDayListToSidebar(getThisMonthDayList());
