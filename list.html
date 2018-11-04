@@ -66,18 +66,18 @@
         <div class="jumbotron">
             <div class="container">
                 <h1 class="display-3">Hot Term</h1>
-                <!--
-                <p>This is a template for a simple marketing or informational website. It includes a large callout called a
-                    jumbotron and three supporting pieces of content. Use it as a starting point to create something more
-                    unique.</p>
-                <p>
-                    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a>
-                </p>
-                -->
             </div>
         </div>
         <div class="container" id="content">
+            <div id="toc"></div>
             <hr>
+            <div class="row">
+                <div class="col-md-10" id="termblock">
+                    <div id="hottermtitle"></div>
+                    <div id="terms"></div>
+                </div>
+                <div class="col-md-2" id="sidebar"></div>
+            </div>
         </div>
 
         <!-- /container -->
@@ -90,33 +90,29 @@
         <p>&copy; Hot Term 2018</p>
     </footer>
     <script type="text/javascript">
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        };
+
         (function () {
-            var urlParams = new URLSearchParams(window.location.search);
             var date = new Date();
+            date = new Date(date.setMinutes(date.getMinutes() - date.getTimezoneOffset() - 480));
             date.setMinutes(date.getMinutes() - 6);
-            if (urlParams.has('d')) {
-                var queryd = urlParams.get('d');
+            if (getUrlParameter('d')) {
+                var queryd = getUrlParameter('d');
                 var url = geturl(queryd.slice(0, 4) + '/' + queryd.slice(4, 6) + '/' + queryd.slice(6, 8) + '/' + queryd);
             } else {
                 var queryd = dateToYMD(date).slice(-11);
                 var url = geturl(dateToYMD(date));
-            }           
-
-            //$('meta[property="og\\:title"]').attr("content", "http://peicheng.github.io/"+window.location.pathname + "?" + urlParams);
-
-            var toc = document.createElement('div');
-            toc.className = "toc";
-            var block = document.createElement('div');
-            block.className = "row";
-            var colmd1_div = document.createElement('div');
-            colmd1_div.className = "col-md-1";
-            //block.appendChild(colmd1_div);
-            var list_div = document.createElement('div');
-            list_div.className = "col-md-10";
-            list_div.setAttribute("id", "termblock");
+            }
 
             var terms_list = new Array();
             var title_list = new Array();
+            var termscontent = '';
+            var tochtml = '';
             $.get(url, function (data, status) {
                 console.log('info: ' + data.indexOf('\n'));
                 if (data.indexOf('\n') == -1) {
@@ -127,7 +123,6 @@
                     var splitflag = true;
                     var lines = data.split('\n');
                 }
-
                 lines.forEach(function (line, index) {
                     try {
                         if (splitflag) {
@@ -136,66 +131,54 @@
                             var j = JSON.parse('{"term"' + line);
                         }
                         terms_list.push(j);
-                        let title = document.createElement('h2');
-                        title.setAttribute("id", "title" + index);
-                        title.className = "anchor";
-                        title.innerText = j.term
-                        list_div.appendChild(title);
                         title_list.push(j.term);
-
-                        let summary = document.createElement('p');
-                        summary.innerText = j.summary;
-                        list_div.appendChild(summary);
-
-                        let links_ul = document.createElement('ul');
+                        termscontent += '<h2 id="title' + index + '" class="anchor">' + j.term + '</h2>';
+                        termscontent += '<p>' + j.summary + '</p>';
+                        termscontent += '<ul>';
+                        
                         j.links.forEach(function (l) {
-                            let li = document.createElement('li');
-                            li.innerHTML = "<a href='" + l.url + "' target='_blank'> " + l.title + "</a> " + l.t;
-                            links_ul.appendChild(li);
+                            termscontent += "<li><a href='" + l.url + "' target='_blank'> " + l.title + "</a> " + l.t + "</li>";
                         });
-                        list_div.appendChild(links_ul);
+                        termscontent += '</ul>';
                         //toc
-                        toc.innerHTML += "<a href='#title" + index + "'>" + j.term + "</a><br>";
+                        tochtml += "<a href='#title" + index + "'>" + j.term + "</a><br>";
 
                     } catch (e) {
                         console.log('line ' + line);
                         console.log(e);
                     }
                 });
+                $('#toc').html(tochtml);
+                $('#terms').html(termscontent);
+
                 $("meta[property='og:description']").attr("content", title_list.join(" ") + " 熱門關鍵字");
-                $("meta[property='og:url']").attr("content", "http://peicheng.github.io/" + window.location.pathname + "?" + urlParams);
-            $("meta[property='og:title']").attr("content", queryd.slice(0, 8) + ' ' + queryd.slice(9) + '時 熱門關鍵字');
+                $("meta[property='og:url']").attr("content", "http://peicheng.github.io/" + window.location.pathname + "?d=" + $.param({ 'd': queryd }));
+                $("meta[property='og:title']").attr("content", queryd.slice(0, 8) + ' ' + queryd.slice(9) + '時 熱門關鍵字');
                 var m = document.createElement('meta');
                 m.name = 'description';
                 m.content = title_list.join(" ") + " 熱門關鍵字";
                 document.head.appendChild(m);
+
             }).fail(function () {
                 //alert('zzz' + status);
             });
-            var sidebar = document.createElement('div');
-            sidebar.className = "col-md-2";
-            sidebar.setAttribute("id", "sidebar");
-            block.appendChild(list_div);
-            block.appendChild(sidebar);
-            $('#content').append(block);
-            $('#content').prepend(toc);
+            $('#hottermtitle').html('<h1>' + queryd.slice(0, 8) + ' ' + queryd.slice(9) + '時 熱門關鍵字</h1>');
             genTodayListToSidebar(queryd);
             genThisMonthDayListToSidebar(getThisMonthDayList());
-            //add headline
-            $('#termblock').prepend('<h1>' + queryd.slice(0, 8) + ' ' + queryd.slice(9) + '時 熱門關鍵字</h1>');
-
-            if (urlParams.has('d')) {
+            /*
+            if (getUrlParameter('d')) {
             } else {
                 urlParams.append('d', queryd)
             }
-            window.history.pushState(null, null, window.location.pathname + "?" + urlParams);
+            */
+            window.history.pushState(queryd, null, window.location.pathname + "?" + $.param({ 'd': queryd }));
             document.title = "Hot Term " + queryd;
 
 
         })();
+
         function genContent(term_list) {
             term_list.forEach(function (d) {
-
             });
         }
         function dateToYMD(date) {
@@ -212,6 +195,7 @@
             var url_prefix = "https://raw.githubusercontent.com/peicheng/hotterm/master/";
             return url_prefix + d + '_hotterm.json'
         }
+
         $(document).ready(function () {
             $(document).on('click', '.ui-btn-top', function (evt) {
                 evt.preventDefault();
@@ -235,6 +219,7 @@
             console.log(getDaysInMonth(mm, yyyy))
 
         }
+
         function getThisMonthDayList() {
             var today = new Date();
             var dd = today.getDate();
@@ -262,11 +247,11 @@
         }
         function genTodayListToSidebar(queryd) {
             $('#sidebar').append("<div id='todaylist'><h3>本日熱門</h3><ul></ul></div>");
-            let todaydiv = $("#todaylist").find('ul');;
+            var todaydiv = $("#todaylist").find('ul');;
             //20181012_01
             for (i = 0; i < 24; i++) {
-                let link = window.location.pathname + "?d=" + queryd.slice(0, 8) + "_" + (i < 10 ? "0" + i : i);
-                let text = queryd.slice(0, 4) + '-' + queryd.slice(4, 6) + '-' + queryd.slice(6, 8) + " " + (i < 10 ? "0" + i : i);
+                var link = window.location.pathname + "?d=" + queryd.slice(0, 8) + "_" + (i < 10 ? "0" + i : i);
+                var text = queryd.slice(0, 4) + '-' + queryd.slice(4, 6) + '-' + queryd.slice(6, 8) + " " + (i < 10 ? "0" + i : i);
                 todaydiv.append("<li><a href='" + link + "'>" + text + "</a></li>");
             }
             $('#sidebar').append(todaydiv);
@@ -275,11 +260,11 @@
         function genThisMonthDayListToSidebar(daylist) {
             //queryd 20181010
             $('#sidebar').append("<div id='thismonthlist'><h3>本月熱門</h3><ul></ul></div>");
-            let todaydiv = $("#thismonthlist").find('ul');;
+            var todaydiv = $("#thismonthlist").find('ul');;
             //20181012_01
             daylist.forEach(function (queryd) {
-                let link = window.location.pathname + "?d=" + queryd.slice(0, 8) + "_12";
-                let text = queryd.slice(0, 4) + '-' + queryd.slice(4, 6) + '-' + queryd.slice(6, 8);
+                var link = window.location.pathname + "?d=" + queryd.slice(0, 8) + "_12";
+                var text = queryd.slice(0, 4) + '-' + queryd.slice(4, 6) + '-' + queryd.slice(6, 8);
                 todaydiv.append("<li><a href='" + link + "'>" + text + "</a></li>");
             });
             $('#sidebar').append(todaydiv);
