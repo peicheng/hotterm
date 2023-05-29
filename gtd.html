@@ -7,7 +7,12 @@
       var dd = today.getDate();
       var mm = today.getMonth();
       var yyyy = today.getFullYear();
-      return getDaysInMonth(mm, yyyy);
+      if (dd >= 20) {
+        return getDaysInMonth(mm, yyyy).concat(getDaysInMonth(mm + 1, yyyy));
+      } else {
+        return getDaysInMonth(mm, yyyy);
+      }
+      
     }
     /* GTD 23.03.15 3
      *
