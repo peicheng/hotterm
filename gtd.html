@@ -12,7 +12,7 @@
       } else {
         return getDaysInMonth(mm, yyyy);
       }
-      
+
     }
     /* GTD 23.03.15 3
      *
@@ -24,7 +24,11 @@
       // Since no month has fewer than 28 days
       var date = new Date(year, month, 1);
       var days = [];
-      //console.log('month', month, 'date.getMonth()', date.getMonth())
+      if (month > 11) {
+        month = 0;
+        year += 1;
+      }
+      // console.log('month', month, 'date.getMonth()', date.getMonth(), 'year', year)
       var m = month + 1;
       var yy = year.toString().slice(2, 4);
       while (date.getMonth() === month) {
