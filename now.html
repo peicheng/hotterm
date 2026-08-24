@@ -7,7 +7,18 @@
 </head>
 
 <body>
-    <h2 id="date-output"></h2>
+    <div id="content" style="width: 100%;">
+        <h2 id="date-output"></h2>
+        <div class="wrap">
+            <input type="text" value="content" class="inputText" id="copyDate">
+            <button class="btnCopy1">copy</button>
+        </div>
+
+        <div class="wrap">
+            <textarea class="textarea" id="copyDateFull" cols="30">content</textarea>
+            <button class="btnCopy2">copy</button>
+        </div>
+    </div>
     <script>
         function dateLikeSh() {
             //date "+%F %a %H:%M:%S" | pbcopy
@@ -29,7 +40,23 @@
                 `${get('weekday')} ` +
                 `${get('hour')}:${get('minute')}:${get('second')}`;
         }
-        document.getElementById('date-output').textContent = dateLikeSh();
+        const result_dateLikeSh = dateLikeSh();
+        document.getElementById('date-output').textContent = result_dateLikeSh;
+        function copyText(dom) {
+            dom.select();
+            document.execCommand('copy');
+        }
+        document.getElementById('copyDate').value = result_dateLikeSh.slice(0, 10);
+        document.getElementById('copyDateFull').value = result_dateLikeSh;
+
+        const btnCopy1 = document.querySelector('.btnCopy1');
+        const btnCopy2 = document.querySelector('.btnCopy2');
+
+        const inputText = document.querySelector('.inputText');
+        const textarea = document.querySelector('.textarea');
+
+        btnCopy1.addEventListener('click', function () { copyText(inputText) });
+        btnCopy2.addEventListener('click', function () { copyText(textarea) });
     </script>
 
 </body>
